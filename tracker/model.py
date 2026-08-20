@@ -25,3 +25,6 @@ class Tracker(nn.Module):
     def forward(self, x):
         x = self.features(x)
         return self.classifier(x)
+
+    def fit(self, x, y):
+        pass
