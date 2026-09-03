@@ -4,7 +4,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi import Request
 import cv2
-from tracker.yolo import detect_faces
+from tracker.face_detector import detect_face
+from tracker.recognition import recognize
 
 app = FastAPI()
 templates = Jinja2Templates(directory='interface/templates')
@@ -15,9 +16,13 @@ app.mount(
 )
 
 stream = False
+current_name = 'Unknown'
+current_score = 0.0
+alarm_active = False
 
 def generate_frame():
-        global stream
+        global stream, current_name, current_score, alarm_active
+
         cap = cv2.VideoCapture(0)
         try:
             while stream:
@@ -26,7 +31,14 @@ def generate_frame():
                 if not ok:
                    break
 
-                frame = detect_faces(frame)
+                frame, embedding = detect_face(frame)
+                if embedding is not None:
+                    current_name, current_score = recognize(embedding)
+                    if current_name == 'Unknown':
+                        alarm_active = True
+                    else:
+                        print_info(current_score, current_name)
+                     
                 ok, buffer = cv2.imencode('.jpg', frame)
 
                 if not ok:
@@ -63,3 +75,19 @@ def home(request: Request):
           'index.html',
           {'request': request}
      )
+
+@app.get('/stop_alarm')
+def stop_alarm():
+    global alarm_active
+    alarm_active = False
+
+@app.get('/alarm_status')
+def alarm_status():
+    return {'active': alarm_active}
+
+@app.get('/print_info') 
+def print_info():
+    return {
+        'name': current_name,
+        'score': current_score,
+    }

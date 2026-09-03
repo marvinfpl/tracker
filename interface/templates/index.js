@@ -20,14 +20,26 @@ btn.addEventListener('click', async () => {
 
 const alarm = new Audio('/static/alarm.wav');
 const alarmBtn = document.getElementById('alarm');
-alarmBtn.addEventListener('click', () => {
-    if (alarmBtn.textContent === 'Activate Alarm') {
+
+async function update_status() {
+    const response = await fetch('/print_info');
+    const data = await response.json();
+
+    document.getElementById('name').textContent = data.name;
+    document.getElementById('score').textContent = data.score.toFixed(2);
+}
+
+async function check_alarm() {
+    const response = await fetch('/alarm_status');
+    const data = await response.json();
+
+    if (data.active) {
         alarm.currentTime = 0;
         alarm.play();
-        alarmBtn.textContent = 'Stop Alarm';
+        alarmBtn.style.display = 'block';
     } else {
         alarm.pause();
         alarm.currentTime = 0;
-        alarmBtn.textContent = 'Activate Alarm';
+        alarmBtn.style.display = 'none';
     }
-})
+}

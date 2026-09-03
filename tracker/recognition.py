@@ -16,7 +16,7 @@ def cosine_similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 def recognize(embedding):
-    best_name = 'unknown'
+    best_name = 'Unknown'
     best_score = -1
 
     for name, known_embedding in database.items():
