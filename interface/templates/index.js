@@ -17,3 +17,17 @@ btn.addEventListener('click', async () => {
         camera.style.display = 'none';
     }
 });
+
+const alarm = new Audio('/static/alarm.wav');
+const alarmBtn = document.getElementById('alarm');
+alarmBtn.addEventListener('click', () => {
+    if (alarmBtn.textContent === 'Activate Alarm') {
+        alarm.currentTime = 0;
+        alarm.play();
+        alarmBtn.textContent = 'Stop Alarm';
+    } else {
+        alarm.pause();
+        alarm.currentTime = 0;
+        alarmBtn.textContent = 'Activate Alarm';
+    }
+})

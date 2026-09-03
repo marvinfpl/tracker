@@ -1,4 +1,3 @@
-import insightface
 from insightface.app import FaceAnalysis
 import cv2
 import numpy as np
@@ -27,7 +26,7 @@ while True:
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(frame, f'Face {score:.2f}', (x1, y1-10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 255, 0), 2)
         print("Bounding box:", face.bbox, "Score:", face.det_score, "Embedding:", face.embedding.shape)
-        
+
     cv2.imshow('face recognition', frame)
 
     if 0xFF == ord('q') & cv2.waitKey(1):
