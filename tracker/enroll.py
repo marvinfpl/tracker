@@ -8,7 +8,7 @@ app = FaceAnalysis(name="buffalo_l", providers=["CPUExecutionProvider"])
 app.prepare(ctx_id=-1, det_size=(640, 640))
 
 database = {}
-root = Path('../IntrudeDetector/allowed_faces')
+root = Path('allowed_faces')
 
 for person_dir in root.iterdir():
     if not person_dir.is_dir():
